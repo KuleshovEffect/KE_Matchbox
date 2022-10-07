@@ -1,0 +1,32 @@
+<ShaderNodePreset SupportsAdaptiveDegradation="False" SupportsAction="False" SupportsTransition="False" SupportsTimeline="False" TimelineUseBack="False" MatteProvider="False" CommercialUsePermitted="True" ShaderType="Matchbox" SoftwareVersion="2017.0.0" LimitInputsToTexture="True" Version="2" Description="Set Input 1 to color noise or white, set Input 2 to your image" Name="KE_Line Drawing">
+   <Shader Clear="0" GridSubdivision="1" OutputBitDepth="Output" Index="1">
+      <Uniform Max="50" Min="1" Default="3" Inc="1" Tooltip="" Row="0" Col="0" Page="0" Type="int" ChannelName="angles" DisplayName="Angles" Name="angles">
+      </Uniform>
+      <Uniform Index="0" NoInput="Error" Tooltip="" DisplayName="front" InputColor="67, 77, 83" Mipmaps="False" GL_TEXTURE_WRAP_T="GL_CLAMP_TO_EDGE" GL_TEXTURE_WRAP_S="GL_CLAMP_TO_EDGE" GL_TEXTURE_MAG_FILTER="GL_LINEAR" GL_TEXTURE_MIN_FILTER="GL_LINEAR" Type="sampler2D" Name="back">
+      </Uniform>
+      <Uniform Index="1" NoInput="Error" Tooltip="" DisplayName="back" InputColor="67, 77, 83" Mipmaps="False" GL_TEXTURE_WRAP_T="GL_CLAMP_TO_EDGE" GL_TEXTURE_WRAP_S="GL_CLAMP_TO_EDGE" GL_TEXTURE_MAG_FILTER="GL_LINEAR" GL_TEXTURE_MIN_FILTER="GL_LINEAR" Type="sampler2D" Name="front">
+      </Uniform>
+      <Uniform Max="200" Min="1" Default="16" Inc="1" Tooltip="" Row="1" Col="0" Page="0" Type="int" ChannelName="samples" DisplayName="Samples" Name="samples">
+      </Uniform>
+      <Uniform Inc="0.01" Tooltip="" Row="0" Col="1" Page="0" Action3DWidget="False" IconType="None" ValueType="Position" Type="vec3" ChannelName="linecolor" DisplayName="Line Color" Name="linecolor">
+         <SubUniform ResDependent="None" Max="1" Min="0" Default="0.25">
+         </SubUniform>
+         <SubUniform ResDependent="None" Max="1" Min="0" Default="0.1">
+         </SubUniform>
+         <SubUniform ResDependent="None" Max="1" Min="0" Default="0.1">
+         </SubUniform>
+      </Uniform>
+      <Uniform ResDependent="None" Max="1" Min="0" Default="0.1" Inc="0.01" Tooltip="" Row="2" Col="1" Page="0" Type="float" ChannelName="boxsize" DisplayName="Box Size" Name="boxsize">
+      </Uniform>
+      <Uniform Max="100" Min="0" Default="4" Inc="1" Tooltip="" Row="2" Col="0" Page="0" Type="int" ChannelName="sway" DisplayName="Sway Size" Name="sway">
+      </Uniform>
+      <Uniform Max="100" Min="-100" Default="80" Inc="1" Tooltip="" Row="3" Col="1" Page="0" Type="int" ChannelName="lineblur" DisplayName="Line Blur" Name="lineblur">
+      </Uniform>
+   </Shader>
+   <Page Name="Options" Page="0">
+      <Col Name="Variables" Col="0" Page="0">
+      </Col>
+      <Col Name="Background" Col="1" Page="0">
+      </Col>
+   </Page>
+</ShaderNodePreset>
