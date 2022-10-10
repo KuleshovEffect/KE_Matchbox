@@ -1,3 +1,4 @@
+#version 120
 /*
 
     Extruded Video Image
@@ -40,8 +41,8 @@
 */
 
 // Ported to Flame Matchbox by Ted Stanley (KuleshovEffect) - October, 2022
-// v1.01
-#version 120
+// v1.02
+
 // Increased the visible resolution, where applicable. Uncomment to see what
 // a big diference it makes.
 #define SUBDIVIDE
@@ -293,10 +294,9 @@ float trace(in vec3 ro, in vec3 rd){
 
     // Overall ray distance and scene distance.
     float t = 0., d;
-
     int iFrame = int(adsk_time);
     
-    for(int i = int(min(iFrame, 0)); i<64; i++){
+    for(int i = int(min(float(iFrame), 0.0)); i<64; i++){
     
         d = map(ro + rd*t);
         // Note the "t*b + a" addition. Basically, we're putting less emphasis on accuracy, as
@@ -339,7 +339,7 @@ float softShadow(vec3 ro, vec3 lp, vec3 n, float k){
 
     // Max shadow iterations - More iterations make nicer shadows, but slow things down. Obviously, the lowest 
     // number to give a decent shadow is the best one to choose. 
-    for (int i = int(min(iFrame, 0)); i<maxIterationsShad; i++){
+    for (int i = int(min(float(iFrame), 0)); i<maxIterationsShad; i++){
 
         float d = map(ro + rd*t);
         shade = min(shade, k*d/t);
