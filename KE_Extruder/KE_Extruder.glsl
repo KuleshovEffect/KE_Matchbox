@@ -39,9 +39,9 @@
 
 */
 
-// Ported to Flame Matchbox by Ted Stanley (KuleshovEffect) - September, 2022
-// v1.0
-
+// Ported to Flame Matchbox by Ted Stanley (KuleshovEffect) - October, 2022
+// v1.01
+#version 120
 // Increased the visible resolution, where applicable. Uncomment to see what
 // a big diference it makes.
 #define SUBDIVIDE
@@ -60,10 +60,10 @@ uniform float adsk_result_w, adsk_result_h;
 uniform float adsk_time;
 //uniform float farness;
 uniform bool sparks, gray;
-float iTime = adsk_time / 24.0;
-int iFrame = int(adsk_time);
+//float iTime = adsk_time / 24.0;
+//int iFrame = int(adsk_time);
 
-vec2 iResolution = vec2(adsk_result_w, adsk_result_h);
+//vec2 iResolution = vec2(adsk_result_w, adsk_result_h);
 
 // Scene object ID to separate the mesh object from the terrain.
 float objID;
@@ -91,8 +91,9 @@ vec3 getTex(vec2 p){
     // but this looks better. I think the original video is in the oldschool 4 to 3
     // format, whereas the canvas is along the order of 16 to 9, which we're used to.
     // If using repeat textures, you'd comment the first line out.
+    vec2 iResolution = vec2(adsk_result_w, adsk_result_h);
     p *= vec2(iResolution.y/iResolution.x, 1);
-    vec3 tx = texture(back, fract(p/2. - .5)).xyz;
+    vec3 tx = texture2D(back, fract(p/2. - .5)).xyz;
     return tx*tx; // Rough sRGB to linear conversion.
 }
 
@@ -292,19 +293,21 @@ float trace(in vec3 ro, in vec3 rd){
 
     // Overall ray distance and scene distance.
     float t = 0., d;
+
+    int iFrame = int(adsk_time);
     
-    for(int i = min(iFrame, 0); i<64; i++){
+    for(int i = int(min(iFrame, 0)); i<64; i++){
     
         d = map(ro + rd*t);
         // Note the "t*b + a" addition. Basically, we're putting less emphasis on accuracy, as
         // "t" increases. It's a cheap trick that works in most situations... Not all, though.
-        if(abs(d)<.001 || t>FAR) break; // Alternative: 0.001*max(t*.25, 1.), etc.
+        if(abs(d)<.001 || t>float(FAR)) break; // Alternative: 0.001*max(t*.25, 1.), etc.
         
         //t += i<32? d*.75 : d; 
         t += d*.7; 
     }
 
-    return min(t, FAR);
+    return min(t, float(FAR));
 }
 
 
@@ -332,9 +335,11 @@ float softShadow(vec3 ro, vec3 lp, vec3 n, float k){
     //float stepDist = end/float(maxIterationsShad);
     rd /= end;
 
+    int iFrame = int(adsk_time);
+
     // Max shadow iterations - More iterations make nicer shadows, but slow things down. Obviously, the lowest 
     // number to give a decent shadow is the best one to choose. 
-    for (int i = min(iFrame, 0); i<maxIterationsShad; i++){
+    for (int i = int(min(iFrame, 0)); i<maxIterationsShad; i++){
 
         float d = map(ro + rd*t);
         shade = min(shade, k*d/t);
@@ -377,9 +382,12 @@ void main( void ){
 
     
     // Screen coordinates.
-	vec2 uv = (gl_FragCoord - iResolution.xy*.5)/iResolution.y;
+    vec2 iResolution = vec2(adsk_result_w, adsk_result_h);
+	vec2 uv = (gl_FragCoord.xy - iResolution.xy*.5)/iResolution.y;
 	
-	// Camera Setup.
+	float iTime = adsk_time / 24.0;
+    
+    // Camera Setup.
 	vec3 lk = vec3(0, 0, 0);//vec3(0, -.25, iTime);  // "Look At" position.
 	vec3 ro = lk + vec3(-.5*.3*cos(iTime/2.), -.5*.2*sin(iTime/2.), -2); // Camera position, doubling as the ray origin.
  
@@ -429,7 +437,7 @@ void main( void ){
 	vec3 col = vec3(0);
 	
 	// The ray has effectively hit the surface, so light it up.
-	if(t < FAR){
+	if(t < float(FAR)){
         
   	
     	// Surface position and surface normal.
